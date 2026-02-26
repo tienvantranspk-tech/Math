@@ -1,0 +1,5 @@
+{
+  "name": "Toán Lớp 1 - Cánh Diều",
+  "description": "Ứng dụng tạo và làm bài kiểm tra Toán lớp 1 (Học kỳ 2) theo chương trình Cánh Diều. Hỗ trợ 3 mức độ: Cơ bản, Nâng cao, Thử thách.",
+  "requestFramePermissions": []
+}
