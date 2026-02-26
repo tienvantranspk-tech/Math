@@ -1,4 +1,7 @@
-import { Level, Question, QuestionType, TestStructure } from '../types';
+import { Level, Question, QuestionType, TestStructure, Subject } from '../types';
+import { generateVietnameseTest } from './vietnameseGenerator';
+
+// ... (keep existing helpers)
 
 // Helper: Random integer min <= x <= max
 const randomInt = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1)) + min;
@@ -174,7 +177,7 @@ const riddles = [
 
 // --- Main Generator Function ---
 
-export const generateTest = (level: Level): TestStructure => {
+export const generateMathTest = (level: Level): TestStructure => {
   const parts = {
     part1: [] as Question[],
     part2: [] as Question[],
@@ -238,9 +241,9 @@ export const generateTest = (level: Level): TestStructure => {
       });
   } else {
       parts.part3.push({
-        id: `q_think_${Date.now()}`, type: QuestionType.THINKING, points: 1,
-        questionText: 'Hình tam giác có mấy cạnh?',
-        correctAnswer: '3 cạnh', image: '🔺'
+          id: `q_think_${Date.now()}`, type: QuestionType.THINKING, points: 1,
+          questionText: 'Hình tam giác có mấy cạnh?',
+          correctAnswer: '3 cạnh', image: '🔺'
       });
   }
 
@@ -277,6 +280,7 @@ export const generateTest = (level: Level): TestStructure => {
 
   return {
     id: `test_${level}_${Date.now()}`,
+    subject: Subject.MATH,
     level,
     title,
     subTitle,
@@ -285,4 +289,11 @@ export const generateTest = (level: Level): TestStructure => {
     advice,
     welcomeMessage
   };
+};
+
+export const generateTest = (subject: Subject, level: Level): TestStructure => {
+  if (subject === Subject.VIETNAMESE) {
+    return generateVietnameseTest(level);
+  }
+  return generateMathTest(level);
 };

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { TestStructure, Question, QuestionType } from '../types';
+import { TestStructure, Question, QuestionType, Subject } from '../types';
 import { Check, Printer, Home, Award, Send, RefreshCcw, X, AlertCircle, Shuffle } from 'lucide-react';
 
 interface TestPaperProps {
@@ -345,7 +345,9 @@ const TestPaper: React.FC<TestPaperProps> = ({ test, onBack, onRegenerate }) => 
             
             <div className="flex justify-center gap-4 text-sm font-bold no-print flex-wrap">
                  <span className="bg-white/60 px-4 py-1.5 rounded-full shadow-sm backdrop-blur-sm">⏱️ Thời gian: 40 phút</span>
-                 <span className="bg-white/60 px-4 py-1.5 rounded-full shadow-sm backdrop-blur-sm">📚 Môn: Toán (Cánh Diều)</span>
+                 <span className="bg-white/60 px-4 py-1.5 rounded-full shadow-sm backdrop-blur-sm">
+                    📚 Môn: {test.subject === Subject.VIETNAMESE ? 'Tiếng Việt (Cánh Diều)' : 'Toán (Cánh Diều)'}
+                 </span>
             </div>
             <div className="mt-4 hidden print:block text-center text-sm italic">
                 (Thời gian làm bài: 40 phút)
@@ -418,7 +420,7 @@ const TestPaper: React.FC<TestPaperProps> = ({ test, onBack, onRegenerate }) => 
         </div>
 
         <div className="mt-10 text-center text-gray-400 text-xs print:mt-12 flex items-center justify-center gap-2">
-            <span>© 2024 Toán Cánh Diều Lớp 1</span>
+            <span>© 2024 {test.subject === Subject.VIETNAMESE ? 'Tiếng Việt' : 'Toán'} Cánh Diều Lớp 1</span>
             <span>•</span>
             <span>Biên soạn cho Kỳ 2</span>
         </div>

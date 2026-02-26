@@ -22,8 +22,14 @@ export interface Question {
   image?: string; // Optional emoji/image representation
 }
 
+export enum Subject {
+  MATH = 'MATH',
+  VIETNAMESE = 'VIETNAMESE'
+}
+
 export interface TestStructure {
   id: string;
+  subject: Subject;
   level: Level;
   title: string;
   subTitle: string;

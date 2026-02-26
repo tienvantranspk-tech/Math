@@ -1,21 +1,45 @@
 import React, { useState } from 'react';
-import { Level, TestStructure } from './types';
+import { Level, TestStructure, Subject } from './types';
 import { generateTest } from './utils/generator';
 import TestPaper from './components/TestPaper';
-import { BookOpen, Star, Zap, ChevronRight, PenTool } from 'lucide-react';
+import { BookOpen, Star, Zap, ChevronRight, PenTool, Calculator, Type } from 'lucide-react';
+
+const SUBJECT_CONFIG = {
+  [Subject.MATH]: {
+    title: 'Toán Lớp 1',
+    icon: '🪁',
+    color: 'blue',
+    levels: {
+      [Level.BASIC]: { desc: 'Dành cho học sinh nắm vững kiến thức nền tảng: Số đến 100, cộng trừ không nhớ.' },
+      [Level.ADVANCED]: { desc: 'Dành cho học sinh khá: Bài toán 2 bước, điền số còn thiếu, so sánh phức tạp.' },
+      [Level.CHALLENGE]: { desc: 'Dành cho học sinh giỏi: Toán tư duy, quy luật dãy số, bài toán logic.' }
+    }
+  },
+  [Subject.VIETNAMESE]: {
+    title: 'Tiếng Việt Lớp 1',
+    icon: '🇻🇳',
+    color: 'orange',
+    levels: {
+      [Level.BASIC]: { desc: 'Dành cho học sinh nắm vững kiến thức nền tảng: Đọc từ, điền từ, chép chính tả.' },
+      [Level.ADVANCED]: { desc: 'Dành cho học sinh khá: Đọc hiểu đoạn văn, sắp xếp câu, tìm từ trái nghĩa.' },
+      [Level.CHALLENGE]: { desc: 'Dành cho học sinh giỏi: Tư duy ngôn ngữ, sáng tạo câu, đố vui chữ cái.' }
+    }
+  }
+};
 
 const App: React.FC = () => {
   const [currentTest, setCurrentTest] = useState<TestStructure | null>(null);
+  const [selectedSubject, setSelectedSubject] = useState<Subject>(Subject.MATH);
 
   const handleSelectLevel = (level: Level) => {
     // Generate a fresh test when level is selected
-    const newTest = generateTest(level);
+    const newTest = generateTest(selectedSubject, level);
     setCurrentTest(newTest);
   };
 
   const handleRegenerate = () => {
     if (currentTest) {
-      const newTest = generateTest(currentTest.level);
+      const newTest = generateTest(currentTest.subject, currentTest.level);
       setCurrentTest(newTest);
     }
   };
@@ -35,16 +59,43 @@ const App: React.FC = () => {
     );
   }
 
+  const config = SUBJECT_CONFIG[selectedSubject];
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex flex-col items-center justify-center p-4 font-sans">
+    <div className={`min-h-screen bg-gradient-to-br ${selectedSubject === Subject.MATH ? 'from-blue-50 to-indigo-100' : 'from-orange-50 to-amber-100'} flex flex-col items-center justify-center p-4 font-sans transition-colors duration-500`}>
       <header className="text-center mb-10">
-        <div className="inline-block bg-white p-3 rounded-full shadow-lg mb-4">
-             <span className="text-5xl">🪁</span>
+        
+        {/* Subject Toggle */}
+        <div className="flex justify-center gap-4 mb-8">
+            <button 
+                onClick={() => setSelectedSubject(Subject.MATH)}
+                className={`flex items-center gap-2 px-6 py-3 rounded-full font-bold transition-all shadow-md ${
+                    selectedSubject === Subject.MATH 
+                    ? 'bg-blue-600 text-white scale-110 ring-4 ring-blue-200' 
+                    : 'bg-white text-gray-500 hover:bg-gray-50'
+                }`}
+            >
+                <Calculator size={20} /> Toán
+            </button>
+            <button 
+                onClick={() => setSelectedSubject(Subject.VIETNAMESE)}
+                className={`flex items-center gap-2 px-6 py-3 rounded-full font-bold transition-all shadow-md ${
+                    selectedSubject === Subject.VIETNAMESE 
+                    ? 'bg-orange-600 text-white scale-110 ring-4 ring-orange-200' 
+                    : 'bg-white text-gray-500 hover:bg-gray-50'
+                }`}
+            >
+                <Type size={20} /> Tiếng Việt
+            </button>
         </div>
-        <h1 className="text-4xl md:text-5xl font-extrabold text-blue-900 mb-2 font-hand">
-          Toán Lớp 1 - Cánh Diều
+
+        <div className="inline-block bg-white p-3 rounded-full shadow-lg mb-4 animate-bounce-slow">
+             <span className="text-5xl">{config.icon}</span>
+        </div>
+        <h1 className={`text-4xl md:text-5xl font-extrabold mb-2 font-hand ${selectedSubject === Subject.MATH ? 'text-blue-900' : 'text-orange-900'}`}>
+          {config.title} - Cánh Diều
         </h1>
-        <p className="text-lg text-blue-600 font-medium">
+        <p className={`text-lg font-medium ${selectedSubject === Subject.MATH ? 'text-blue-600' : 'text-orange-600'}`}>
           Bộ đề kiểm tra Học Kỳ 2 (Chuẩn Bộ GD&ĐT)
         </p>
       </header>
@@ -64,7 +115,7 @@ const App: React.FC = () => {
             </div>
             <h2 className="text-2xl font-bold text-gray-800 mb-2 group-hover:text-green-600">Cơ Bản</h2>
             <p className="text-gray-500 mb-6 text-sm">
-              Dành cho học sinh nắm vững kiến thức nền tảng: Số đến 100, cộng trừ không nhớ.
+              {config.levels[Level.BASIC].desc}
             </p>
             <span className="text-green-600 font-bold flex items-center gap-1">
               Làm bài ngay <ChevronRight size={16} />
@@ -86,7 +137,7 @@ const App: React.FC = () => {
             </div>
             <h2 className="text-2xl font-bold text-gray-800 mb-2 group-hover:text-yellow-500">Nâng Cao</h2>
             <p className="text-gray-500 mb-6 text-sm">
-              Dành cho học sinh khá: Bài toán 2 bước, điền số còn thiếu, so sánh phức tạp.
+              {config.levels[Level.ADVANCED].desc}
             </p>
             <span className="text-yellow-600 font-bold flex items-center gap-1">
               Thử sức <ChevronRight size={16} />
@@ -108,7 +159,7 @@ const App: React.FC = () => {
             </div>
             <h2 className="text-2xl font-bold text-gray-800 mb-2 group-hover:text-red-600">Thử Thách</h2>
             <p className="text-gray-500 mb-6 text-sm">
-              Dành cho học sinh giỏi: Toán tư duy, quy luật dãy số, bài toán logic.
+              {config.levels[Level.CHALLENGE].desc}
             </p>
             <span className="text-red-600 font-bold flex items-center gap-1">
               Chinh phục <ChevronRight size={16} />

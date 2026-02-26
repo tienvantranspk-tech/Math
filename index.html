@@ -50,38 +50,6 @@
 
   <body class="bg-blue-50">
     <div id="root"></div>
-
-    <!-- ✅ THIS is the missing part: mount React into #root -->
-    <script type="module">
-      import React from "react";
-      import { createRoot } from "react-dom/client";
-
-      // Bạn có thể thay toàn bộ App() bằng app thật của bạn sau
-      function App() {
-        return React.createElement(
-          "div",
-          { className: "min-h-screen flex items-center justify-center p-6" },
-          React.createElement(
-            "div",
-            { className: "bg-white rounded-2xl shadow p-6 max-w-xl w-full" },
-            React.createElement(
-              "h1",
-              { className: "text-2xl font-bold mb-2 font-hand text-blue-700" },
-              "Toán Lớp 1 - Cánh Diều"
-            ),
-            React.createElement(
-              "p",
-              { className: "text-gray-700" },
-              "✅ Deploy Vercel đã render React thành công. Bây giờ bạn thay App bằng UI/Component thật."
-            )
-          )
-        );
-      }
-
-      createRoot(document.getElementById("root")).render(
-        React.createElement(App)
-      );
-    </script>
   <script type="module" src="/index.tsx"></script>
 </body>
 </html>
