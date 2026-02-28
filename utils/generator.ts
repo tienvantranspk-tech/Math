@@ -114,17 +114,33 @@ const genPredecessorSuccessor = (): Question => {
 };
 
 const genCompare = (level: Level): Question => {
-    const a = randomInt(10, 90);
-    const b = randomInt(10, 90);
-    if (a === b) return genCompare(level); // Retry if equal
+    const comparisonData = [];
+    const labels = ['a)', 'b)', 'c)', 'd)', 'e)'];
+    let correctAnswerText = '';
+
+    for (let i = 0; i < 5; i++) {
+        const a = randomInt(10, 99);
+        const b = randomInt(10, 99);
+        
+        let sign = '=';
+        if (a > b) sign = '>';
+        if (a < b) sign = '<';
+        
+        comparisonData.push({ label: labels[i], val1: a, val2: b, sign });
+        correctAnswerText += `${labels[i]} ${a} ${sign} ${b}\n`;
+    }
 
     return {
         id: `q_comp_${Date.now()}_${Math.random()}`,
         type: QuestionType.ESSAY,
-        points: 1,
+        points: 2,
         questionText: `Điền dấu > < = thích hợp:`,
-        correctAnswer: a > b ? `${a} > ${b}` : `${a} < ${b}`,
-        image: `⚖️ ${a} ... ${b}`
+        correctAnswer: correctAnswerText.trim(),
+        image: '⚖️',
+        metadata: {
+            type: 'COMPARISON',
+            data: comparisonData
+        }
     };
 }
 
@@ -215,15 +231,38 @@ export const generateMathTest = (level: Level): TestStructure => {
   }
 
   // Generate Part 2: Essay (3 questions)
-  // 1. Math setting
-  const a = randomInt(20, 60);
-  const b = randomInt(10, 30);
+  // 1. Math setting (Vertical Math - 5 problems)
+  const verticalMathData = [];
+  const labels = ['a)', 'b)', 'c)', 'd)', 'e)'];
+  let correctAnswerText = '';
+
+  for (let i = 0; i < 5; i++) {
+      const isAdd = Math.random() > 0.5;
+      let val1, val2, op;
+      
+      if (isAdd) {
+          val1 = randomInt(10, 60);
+          val2 = randomInt(5, 30);
+          op = '+';
+          correctAnswerText += `${labels[i]} ${val1} + ${val2} = ${val1 + val2}\n`;
+      } else {
+          val1 = randomInt(30, 90);
+          val2 = randomInt(10, 29);
+          op = '-';
+          correctAnswerText += `${labels[i]} ${val1} - ${val2} = ${val1 - val2}\n`;
+      }
+      verticalMathData.push({ label: labels[i], val1, val2, op });
+  }
+
   parts.part2.push({
       id: `q_essay_math_${Date.now()}`, type: QuestionType.ESSAY, points: 2,
       questionText: 'Đặt tính rồi tính:',
-      correctAnswer: `a) ${a} + ${b} = ${a+b}\nb) ${a+b} - ${b} = ${a}`,
-      explanation: 'Viết số thẳng cột.',
-      image: `✍️\na) ${a} + ${b}      b) ${a+b} - ${b}`
+      correctAnswer: correctAnswerText.trim(),
+      explanation: 'Viết số thẳng cột, tính từ phải sang trái.',
+      metadata: {
+        type: 'VERTICAL_MATH',
+        data: verticalMathData
+      }
   });
 
   // 2. Comparison

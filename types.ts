@@ -20,6 +20,7 @@ export interface Question {
   explanation?: string; // Guide for parents
   points: number;
   image?: string; // Optional emoji/image representation
+  metadata?: any; // For custom rendering data
 }
 
 export enum Subject {

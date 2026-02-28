@@ -107,6 +107,141 @@ const TestPaper: React.FC<TestPaperProps> = ({ test, onBack, onRegenerate }) => 
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const renderVerticalMath = (data: any[], questionId: string) => {
+    let currentAnswers: Record<string, string> = {};
+    try {
+        if (userAnswers[questionId]) {
+            const val = userAnswers[questionId];
+            if (val.startsWith('{')) {
+                currentAnswers = JSON.parse(val);
+            }
+        }
+    } catch (e) {
+        console.error("Error parsing answers", e);
+    }
+
+    const handleSubAnswerChange = (idx: number, val: string) => {
+        // Only allow numbers
+        if (!/^\d*$/.test(val)) return;
+        
+        const newAnswers = { ...currentAnswers, [idx]: val };
+        handleAnswerChange(questionId, JSON.stringify(newAnswers));
+    };
+
+    return (
+        <div className="flex flex-wrap gap-8 mt-4 mb-4 justify-center md:justify-start">
+            {data.map((item: any, idx: number) => {
+                const result = item.op === '+' ? item.val1 + item.val2 : item.val1 - item.val2;
+                const userVal = currentAnswers[idx] || '';
+                const isCorrect = isSubmitted && parseInt(userVal) === result;
+
+                return (
+                <div key={idx} className="flex flex-col items-center p-4 bg-blue-50/50 rounded-lg border border-blue-100 min-w-[120px]">
+                    <span className="font-bold text-gray-500 mb-2 self-start">{item.label}</span>
+                    <div className="text-3xl font-mono font-bold text-gray-800 flex flex-col items-end">
+                        <div>{item.val1}</div>
+                        <div className="flex items-center gap-2">
+                            <span className="text-2xl">{item.op}</span>
+                            <span>{item.val2}</span>
+                        </div>
+                        <div className="w-full h-1 bg-gray-800 mt-1 mb-1"></div>
+                        
+                        <input 
+                            type="text" 
+                            disabled={isSubmitted}
+                            maxLength={3}
+                            className={`w-20 text-center text-3xl p-1 rounded border-2 outline-none font-mono ${
+                                isSubmitted 
+                                    ? (isCorrect ? 'text-green-600 border-green-500 bg-green-50' : 'text-red-600 border-red-500 bg-red-50')
+                                    : 'bg-white border-blue-200 focus:border-blue-500 text-blue-800'
+                            }`}
+                            value={userVal}
+                            onChange={(e) => handleSubAnswerChange(idx, e.target.value)}
+                        />
+                        
+                        {isSubmitted && !isCorrect && (
+                             <div className="text-lg text-green-600 font-bold mt-1 animate-fade-in">
+                                {result}
+                             </div>
+                        )}
+                    </div>
+                </div>
+            )})}
+        </div>
+    );
+  };
+
+  const renderComparison = (data: any[], questionId: string) => {
+    let currentAnswers: Record<string, string> = {};
+    try {
+        if (userAnswers[questionId]) {
+            const val = userAnswers[questionId];
+            if (val.startsWith('{')) {
+                currentAnswers = JSON.parse(val);
+            }
+        }
+    } catch (e) {
+        console.error("Error parsing answers", e);
+    }
+
+    const handleSubAnswerChange = (idx: number, val: string) => {
+        const newAnswers = { ...currentAnswers, [idx]: val };
+        handleAnswerChange(questionId, JSON.stringify(newAnswers));
+    };
+
+    return (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 mb-4">
+            {data.map((item: any, idx: number) => {
+                const userVal = currentAnswers[idx] || '';
+                const isCorrect = isSubmitted && userVal === item.sign;
+                
+                return (
+                    <div key={idx} className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg border border-gray-200">
+                        <span className="font-bold text-gray-500 w-6">{item.label}</span>
+                        <span className="text-2xl font-bold text-gray-800 w-12 text-right">{item.val1}</span>
+                        
+                        <div className="flex gap-1 mx-2">
+                            {['>', '<', '='].map((sign) => {
+                                const isSelected = userVal === sign;
+                                let btnClass = "w-10 h-10 rounded-lg border-2 font-bold text-xl flex items-center justify-center transition-all ";
+                                
+                                if (isSubmitted) {
+                                    if (sign === item.sign) {
+                                         btnClass += "bg-green-100 border-green-500 text-green-700";
+                                    } else if (isSelected && sign !== item.sign) {
+                                         btnClass += "bg-red-100 border-red-500 text-red-700";
+                                    } else {
+                                         btnClass += "bg-gray-100 border-gray-200 text-gray-400 opacity-30";
+                                    }
+                                } else {
+                                    if (isSelected) {
+                                        btnClass += "bg-blue-100 border-blue-500 text-blue-700 shadow-sm transform scale-105";
+                                    } else {
+                                        btnClass += "bg-white border-gray-300 text-gray-600 hover:bg-gray-100";
+                                    }
+                                }
+
+                                return (
+                                    <button
+                                        key={sign}
+                                        disabled={isSubmitted}
+                                        onClick={() => handleSubAnswerChange(idx, sign)}
+                                        className={btnClass}
+                                    >
+                                        {sign}
+                                    </button>
+                                );
+                            })}
+                        </div>
+
+                        <span className="text-2xl font-bold text-gray-800 w-12 text-left">{item.val2}</span>
+                    </div>
+                );
+            })}
+        </div>
+    );
+  };
+
   const renderSection = (title: string, questions: Question[]) => {
     if (!questions || questions.length === 0) return null;
     return (
@@ -131,11 +266,15 @@ const TestPaper: React.FC<TestPaperProps> = ({ test, onBack, onRegenerate }) => 
                   <span className="font-bold text-gray-500 print:text-black">Câu {idx + 1}.</span>
                   <div className="flex-1">
                       <div className="flex justify-between items-start">
-                           <p className="text-lg font-medium text-gray-900 mb-2 whitespace-pre-line print:text-black">
-                              {q.image && <span className="mr-2 text-2xl align-middle">{q.image}</span>}
-                              {q.questionText}
-                          </p>
-                          <span className="text-xs font-bold bg-gray-100 text-gray-600 px-2 py-1 rounded print:hidden">
+                           <div className="w-full">
+                               <p className="text-lg font-medium text-gray-900 mb-2 whitespace-pre-line print:text-black">
+                                  {q.image && !q.metadata && <span className="mr-2 text-2xl align-middle">{q.image}</span>}
+                                  {q.questionText}
+                               </p>
+                               {q.metadata?.type === 'VERTICAL_MATH' && renderVerticalMath(q.metadata.data, q.id)}
+                               {q.metadata?.type === 'COMPARISON' && renderComparison(q.metadata.data, q.id)}
+                           </div>
+                          <span className="text-xs font-bold bg-gray-100 text-gray-600 px-2 py-1 rounded print:hidden flex-shrink-0 ml-2">
                               {q.points} điểm
                           </span>
                       </div>
@@ -197,7 +336,7 @@ const TestPaper: React.FC<TestPaperProps> = ({ test, onBack, onRegenerate }) => 
                     )}
 
                     {/* ESSAY / THINKING / GAME INPUT RENDERING */}
-                    {(q.type === QuestionType.ESSAY || q.type === QuestionType.THINKING || q.type === QuestionType.GAME) && (
+                    {(q.type === QuestionType.ESSAY || q.type === QuestionType.THINKING || q.type === QuestionType.GAME) && q.metadata?.type !== 'VERTICAL_MATH' && q.metadata?.type !== 'COMPARISON' && (
                        <div className="mt-3">
                            {/* Print line */}
                            <div className="mt-4 border-b border-gray-300 border-dashed h-20 w-full hidden print:block"></div>
