@@ -1,0 +1,110 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String         @id @default(cuid())
+  email          String         @unique
+  name           String?
+  password       String?
+  createdAt      DateTime       @default(now())
+  children       ChildProfile[]
+}
+
+model ChildProfile {
+  id             String         @id @default(cuid())
+  userId         String
+  user           User           @relation(fields: [userId], references: [id])
+  name           String
+  avatarId       String?
+  grade          Int            @default(2)
+  coins          Int            @default(0)
+  stars          Int            @default(0)
+  currentStreak  Int            @default(0)
+  attempts       Attempt[]
+  masteries      Mastery[]
+  inventories    Inventory[]
+  practiceLength Int            @default(10)
+  practiceTopics String         @default("all")
+  createdAt      DateTime       @default(now())
+}
+
+model Topic {
+  id             String         @id
+  name           String
+  order          Int
+  worldTheme     String?
+  iconUrl        String?
+  lessons        Lesson[]
+}
+
+model Lesson {
+  id             String         @id
+  topicId        String
+  topic          Topic          @relation(fields: [topicId], references: [id])
+  name           String
+  order          Int
+  questions      Question[]
+  attempts       Attempt[]
+}
+
+model Question {
+  id                 String     @id @default(cuid())
+  lessonId           String
+  lesson             Lesson     @relation(fields: [lessonId], references: [id])
+  contentJson        String     
+  answerJson         String     
+  difficulty         Int        @default(1)
+  representationType String     
+  attempts           Attempt[]
+}
+
+model Attempt {
+  id             String         @id @default(cuid())
+  childId        String
+  child          ChildProfile   @relation(fields: [childId], references: [id])
+  questionId     String
+  question       Question       @relation(fields: [questionId], references: [id])
+  lessonId       String
+  lesson         Lesson         @relation(fields: [lessonId], references: [id])
+  isCorrect      Boolean
+  timeSeconds    Int?
+  createdAt      DateTime       @default(now())
+}
+
+model Mastery {
+  id             String         @id @default(cuid())
+  childId        String
+  child          ChildProfile   @relation(fields: [childId], references: [id])
+  skillId        String
+  level          Int            @default(1)
+  totalAttempts  Int            @default(0)
+  updatedAt      DateTime       @updatedAt
+}
+
+model Item {
+  id             String         @id @default(cuid())
+  name           String
+  type           String
+  price          Int
+  image          String?
+  inventories    Inventory[]
+}
+
+model Inventory {
+  id             String         @id @default(cuid())
+  childId        String
+  child          ChildProfile   @relation(fields: [childId], references: [id])
+  itemId         String
+  item           Item           @relation(fields: [itemId], references: [id])
+  isEquipped     Boolean        @default(false)
+  createdAt      DateTime       @default(now())
+}

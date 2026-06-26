@@ -1,49 +1,109 @@
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-html {
-  height: 100%;
-}
-
-html,
-body {
-  max-width: 100vw;
-  overflow-x: hidden;
+  --color-primary: #4ECDC4; /* Xanh ngọc rực rỡ */
+  --color-primary-dark: #3BB5AC;
+  --color-secondary: #FF6B6B; /* Đỏ san hô / Cam rực */
+  --color-secondary-dark: #E65A5A;
+  --color-success: #A8E6CF; /* Xanh lá tươi */
+  --color-accent: #9B59B6; /* Tím nhạt */
+  --color-background-start: #C4E0E5; 
+  --color-background-end: #4CA1AF;
+  --color-text: #2D3436;
+  --color-white: #FFFFFF;
+  --color-gray: #E0E0E0;
+  --color-error: #FF6B6B;
 }
 
 body {
-  min-height: 100%;
+  color: var(--color-text);
+  /* Nền Gradient tươi sáng kết hợp Pattern chấm bi */
+  background: 
+    radial-gradient(circle, rgba(255,255,255,0.2) 10%, transparent 11%),
+    radial-gradient(circle, rgba(255,255,255,0.2) 10%, transparent 11%),
+    linear-gradient(135deg, var(--color-background-start) 0%, var(--color-background-end) 100%);
+  background-size: 40px 40px, 40px 40px, 100% 100%;
+  background-position: 0 0, 20px 20px, 0 0;
+  background-attachment: fixed;
+  
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  overscroll-behavior-y: none;
+}
+
+/* Tablet/Desktop Responsive Container */
+.app-container {
+  width: 100%;
+  min-height: 100vh;
+  /* Kính mờ nhẹ thay cho nền trắng tinh */
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  
+  position: relative;
   display: flex;
   flex-direction: column;
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
+@media (min-width: 1025px) {
+  .app-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    min-height: calc(100vh - 4rem);
+    border-radius: 32px;
+    border: 4px solid rgba(255,255,255,0.5);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    overflow: hidden; /* Clips children to border-radius but allows container height to grow */
   }
+}
+
+/* Base button styles for kids */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 64px;
+  min-width: 64px;
+  border-radius: 32px;
+  font-size: 1.5rem;
+  font-weight: 900;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Hiệu ứng nảy (bounce) */
+  user-select: none;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.btn:hover {
+  transform: translateY(-4px) scale(1.02);
+}
+
+.btn:active {
+  transform: translateY(4px) scale(0.98);
+  box-shadow: none !important;
+}
+
+.btn-primary {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  box-shadow: 0 8px 0 var(--color-primary-dark), 0 15px 20px rgba(78,205,196,0.4);
+  border: 2px solid white;
+}
+
+.btn-secondary {
+  background-color: var(--color-secondary);
+  color: var(--color-white);
+  box-shadow: 0 8px 0 var(--color-secondary-dark), 0 15px 20px rgba(255,107,107,0.4);
+  border: 2px solid white;
+}
+
+.btn-success {
+  background-color: var(--color-success);
+  color: #2D3436;
+  box-shadow: 0 8px 0 #85D1B3, 0 15px 20px rgba(168,230,207,0.4);
+  border: 2px solid white;
 }

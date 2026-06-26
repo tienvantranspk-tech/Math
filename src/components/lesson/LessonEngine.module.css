@@ -1,0 +1,366 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  flex: 1;
+  background-color: var(--color-background);
+  position: relative;
+}
+.header {
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: white;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 10;
+  box-sizing: border-box;
+}
+.closeBtn {
+  color: #6B7280;
+  font-weight: bold;
+  font-size: 1.25rem;
+  padding: 0.5rem 1rem;
+  background-color: #F3F4F6;
+  border-radius: 9999px;
+  border: none;
+  cursor: pointer;
+}
+.lessonTitle {
+  font-weight: bold;
+  color: var(--color-primary);
+  font-size: 1.25rem;
+}
+.starBox {
+  background-color: #FBBF24;
+  color: #78350F;
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  font-weight: bold;
+}
+.content {
+  flex: 1;
+  margin-top: 5rem;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+.introCard {
+  text-align: center;
+  background-color: white;
+  padding: 3rem;
+  border-radius: 1.5rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  width: 100%;
+  max-width: 42rem;
+  box-sizing: border-box;
+}
+.introEmoji {
+  font-size: 6rem;
+  margin-bottom: 1.5rem;
+}
+.introTitle {
+  font-size: 2.25rem;
+  font-weight: bold;
+  color: var(--color-secondary);
+  margin-bottom: 1.5rem;
+  margin-top: 0;
+}
+.introText {
+  font-size: 1.5rem;
+  color: #374151;
+  margin-bottom: 3rem;
+}
+.questionContainer {
+  width: 100%;
+  max-width: 48rem;
+}
+.questionCard {
+  background-color: white;
+  padding: 2.5rem;
+  border-radius: 1.5rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+  width: 100%;
+}
+.questionText {
+  font-size: 2.25rem;
+  font-weight: bold;
+  color: #1F2937;
+  margin-bottom: 3rem;
+  text-align: center;
+  margin-top: 0;
+}
+.optionsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.5rem;
+  width: 100%;
+}
+.optionBtn {
+  background-color: #EFF6FF;
+  color: var(--color-primary);
+  font-weight: bold;
+  font-size: 2.25rem;
+  padding: 3rem;
+  border-radius: 1rem;
+  border: 4px solid #BFDBFE;
+  transition: background-color 0.2s;
+  cursor: pointer;
+}
+.optionBtn:hover {
+  background-color: #DBEAFE;
+}
+.numberInput {
+  font-size: 3.75rem;
+  text-align: center;
+  padding: 1.5rem;
+  width: 12rem;
+  border: 4px solid var(--color-secondary);
+  border-radius: 1rem;
+  margin-bottom: 3rem;
+  outline: none;
+}
+.resultCard {
+  text-align: center;
+  background-color: white;
+  padding: 3rem;
+  border-radius: 1.5rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  width: 100%;
+  max-width: 42rem;
+  box-sizing: border-box;
+}
+.resultTitle {
+  font-size: 2.25rem;
+  font-weight: bold;
+  color: var(--color-success);
+  margin-bottom: 1.5rem;
+}
+.resultStars {
+  font-size: 1.875rem;
+  font-weight: bold;
+  color: #EAB308;
+  margin-bottom: 3rem;
+}
+/* New Question Types */
+.tfContainer {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 2rem;
+  width: 100%;
+}
+.tfBtnTrue {
+  background-color: #D1FAE5;
+  color: #065F46;
+  font-weight: bold;
+  font-size: 2.25rem;
+  padding: 3rem;
+  border-radius: 1rem;
+  border: 4px solid #34D399;
+  cursor: pointer;
+}
+.tfBtnFalse {
+  background-color: #FEE2E2;
+  color: #991B1B;
+  font-weight: bold;
+  font-size: 2.25rem;
+  padding: 3rem;
+  border-radius: 1rem;
+  border: 4px solid #F87171;
+  cursor: pointer;
+}
+.matchingContainer {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  gap: 3rem;
+}
+.matchingCol {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  flex: 1;
+}
+.matchingItem {
+  background-color: #F3F4F6;
+  border: 4px solid #D1D5DB;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s;
+}
+.matchingItemSelected {
+  background-color: #DBEAFE;
+  border-color: var(--color-primary);
+}
+.matchingItemMatched {
+  background-color: #E5E7EB;
+  border-color: #E5E7EB;
+  color: #9CA3AF;
+  cursor: default;
+  transform: scale(0.95);
+}
+.sortContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3rem;
+  width: 100%;
+}
+.sortSlots {
+  display: flex;
+  gap: 1rem;
+}
+.sortSlot {
+  width: 5rem;
+  height: 5rem;
+  border: 4px dashed #9CA3AF;
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: bold;
+  background-color: #F9FAFB;
+  cursor: pointer;
+}
+.sortSlotFilled {
+  border-style: solid;
+  border-color: var(--color-primary);
+  background-color: #EFF6FF;
+  color: var(--color-primary);
+}
+.sortItemsGroup {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.sortItem {
+  width: 5rem;
+  height: 5rem;
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: bold;
+  background-color: white;
+  border: 4px solid var(--color-secondary);
+  color: var(--color-secondary);
+  cursor: pointer;
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+}
+.sortItemUsed {
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media (max-width: 600px) {
+  .content {
+    padding: 1rem;
+    margin-top: 4.5rem;
+  }
+  .introCard, .questionCard, .resultCard {
+    padding: 1.5rem 1rem;
+    border-radius: 1rem;
+  }
+  .introEmoji {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+  }
+  .introTitle {
+    font-size: 1.75rem;
+    margin-bottom: 1rem;
+  }
+  .introText {
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+  }
+  .questionText {
+    font-size: 1.6rem;
+    margin-bottom: 1.5rem;
+  }
+  .optionsGrid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .optionBtn {
+    font-size: 1.35rem;
+    padding: 1.5rem 1rem;
+    border-radius: 0.75rem;
+    border-width: 3px;
+  }
+  .numberInput {
+    font-size: 2.25rem;
+    padding: 0.75rem;
+    width: 8rem;
+    margin-bottom: 1.5rem;
+    border-width: 3px;
+  }
+  .tfContainer {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .tfBtnTrue, .tfBtnFalse {
+    font-size: 1.35rem;
+    padding: 1.5rem 1rem;
+    border-radius: 0.75rem;
+    border-width: 3px;
+  }
+  .matchingContainer {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  .matchingCol {
+    gap: 1rem;
+  }
+  .matchingItem {
+    font-size: 1.15rem;
+    padding: 1rem;
+    border-width: 3px;
+  }
+  .sortSlots {
+    gap: 0.5rem;
+  }
+  .sortSlot {
+    width: 3.5rem;
+    height: 3.5rem;
+    font-size: 1.5rem;
+    border-width: 3px;
+    border-radius: 0.75rem;
+  }
+  .sortItemsGroup {
+    gap: 0.5rem;
+  }
+  .sortItem {
+    width: 3.5rem;
+    height: 3.5rem;
+    font-size: 1.5rem;
+    border-width: 3px;
+    border-radius: 0.75rem;
+  }
+  .resultTitle {
+    font-size: 1.75rem;
+    margin-bottom: 1rem;
+  }
+  .resultStars {
+    font-size: 1.35rem;
+    margin-bottom: 2rem;
+  }
+}
